@@ -18,6 +18,14 @@
 		// Tomorrow's formatted date
 		var Tomorrow = new FormattedDate(TomorrowDate);
 		
+		// Two Days From Now date
+		var TwoDaysDate = new Date(TodayDate.getTime() + (86400000 * 2));
+		
+		// Two Days From Now formatted date
+		var TwoDays = new FormattedDate(TwoDaysDate);
+		
+		$('#twodaysname').text(TwoDays.day());
+		
 		// Spinner
 		var MySpinner = new Spinner(Default.spinnerOpts);
 		
@@ -114,6 +122,8 @@
 							$('#time-end-icon').text('');
 							$('#time-end').removeClass('active');
 						}
+						
+						// Show phone number of school
 						var phone = String(Application.Schools[i].data.phone).replace('/[^0-9]/','');
 						if(Application.isPhone)
 						{
@@ -123,6 +133,7 @@
 						{
 							$('#sick-tel,#sick-tel-summary').html('<b>Call: '+phone.slice(-10,-7)+'-'+phone.slice(-7,-4)+'-'+phone.slice(-4)+'</b>');
 						}
+						
 						$('#sick').show();
 					}
 					else
@@ -208,37 +219,29 @@
 				}
 				// Create the Google LatLng object
 				Application.SafeLocations[i].latlng = new google.maps.LatLng(Application.SafeLocations[i].data.lat,Application.SafeLocations[i].data.lng);
-				// Create the markers for each school
+				// Create the markers for each safe location type
+				var SafeMarkerOptions = {
+					position: Application.SafeLocations[i].latlng,
+					map: Application.Map.Map
+				};
 				if(Application.SafeLocations[i].data.type === 'police station')
 				{
-					Application.SafeLocations[i].marker = new google.maps.Marker({
-						position: Application.SafeLocations[i].latlng,
-						map: Application.Map.Map,
-						icon:'img/police.png'
-					});
+					SafeMarkerOptions.icon = 'img/police.png';
+					Application.SafeLocations[i].marker = new google.maps.Marker(SafeMarkerOptions);
 				}
 				else if (Application.SafeLocations[i].data.type === 'fire station')
 				{
-					Application.SafeLocations[i].marker = new google.maps.Marker({
-						position: Application.SafeLocations[i].latlng,
-						map: Application.Map.Map,
-						icon:'img/fire.png'
-					});
+					SafeMarkerOptions.icon = 'img/fire.png';
+					Application.SafeLocations[i].marker = new google.maps.Marker(SafeMarkerOptions);
 				}
 				else if (Application.SafeLocations[i].data.type === 'hospital')
 				{
-					Application.SafeLocations[i].marker = new google.maps.Marker({
-						position: Application.SafeLocations[i].latlng,
-						map: Application.Map.Map,
-						icon:'img/hosp.png'
-					});
+					SafeMarkerOptions.icon = 'img/hosp.png';
+					Application.SafeLocations[i].marker = new google.maps.Marker(SafeMarkerOptions);
 				}
 				else
 				{
-					Application.SafeLocations[i].marker = new google.maps.Marker({
-						position: Application.SafeLocations[i].latlng,
-						map: Application.Map.Map
-					});
+					Application.SafeLocations[i].marker = new google.maps.Marker(SafeMarkerOptions);
 				}
 				// Info boxes
 				var phone = String(Application.SafeLocations[i].data.phone).replace(/[^0-9]/g,'');
@@ -296,6 +299,7 @@
 			
 			Application.today = Today.month+'/'+Today.date+'/'+Today.year;
 			Application.tomorrow = Tomorrow.month+'/'+Tomorrow.date+'/'+Tomorrow.year;
+			Application.twodays = TwoDays.month+'/'+TwoDays.date+'/'+TwoDays.year;
 			
 			for(var i in Application.Schedules)
 			{
@@ -306,6 +310,10 @@
 				else if(Application.Schedules[i].data.date === Application.tomorrow)
 				{
 					Default.schooltomorrow = Application.Schedules[i].data.unifiedcalendar;
+				}
+				else if(Application.Schedules[i].data.date === Application.twodays)
+				{
+					Default.schooltwodays = Application.Schedules[i].data.unifiedcalendar;
 				}
 			}
 			function checkSchedule(dateType,date,domId)
@@ -325,6 +333,7 @@
 			}
 			checkSchedule(Default.schooltoday,'Today','schedule');
 			checkSchedule(Default.schooltomorrow,'Tomorrow','schedule-tomorrow');
+			checkSchedule(Default.schooltwodays,TwoDays.day(),'schedule-twodays');
 		}
 		
 		/**
@@ -466,7 +475,7 @@
 					{
 						Application.Map.setTouchScroll(false);
 					}
-					$('#before-map,#div-footer,#grp-directions').hide(750,function(){
+					$('#before-map,#div-footer,#grp-directions').hide(0,function(){
 						$('#map-width').css('height','100%');
 						$('#map-ratio').css('margin-top', $(window).height());
 						controlUI.title = 'Click to close up the map.';
@@ -490,7 +499,7 @@
 					{
 						Application.Map.setTouchScroll(true);
 					}
-					$('#before-map,#div-footer,#grp-directions').show(750,function(){
+					$('#before-map,#div-footer,#grp-directions').show(0,function(){
 						$('#map-width').css('height','');
 						$('#map-ratio').css('margin-top','200px');
 						controlUI.title = 'Click to interact with the map.';
@@ -520,7 +529,6 @@
 					Application.SchoolSelected = Schools[i];
 					$('#summary-school').text(Schools[i].data.longname);
 					$('#school').val(Schools[i].data.longname);
-					console.log(Application.SchoolSelected.data.start.length);
 					if(Application.SchoolSelected.data.start.length > 0)
 					{
 						$('#time-nobtns').hide();
@@ -573,8 +581,11 @@
 			{
 				unixtime = Date.parse(Application.tomorrow+' '+userTime).getTime();
 			}
+			else
+			{
+				unixtime = Date.parse(Application.twodays+' '+userTime).getTime();
+			}
 			var transitOptions = {};
-			console.log(Application.leaverightnow);
 			if(Application.leaverightnow === false)
 			{
 				transitOptions = {
@@ -586,7 +597,8 @@
 				origin : $('#mylocation').val()+', ' + Default.city + ', ' + Default.state,
 				destination : Application.SchoolSelected.data.address+', '+Default.city+', '+Default.state+' '+Application.SchoolSelected.data.postalcode,
 				transitOptions : transitOptions,
-				provideRouteAlternatives : true
+				provideRouteAlternatives : true,
+				durationInTraffic : true
 			};
 			if(Application.travelmode === 'TRANSIT')
 			{
@@ -797,6 +809,11 @@
 		var SafeFT = new FusionTable(Default.fturl,Default.safelocationquery,Default.googlemapsapikey);
 		if(Application.localStorage)
 		{
+			// Reset all TTLs
+			// $.jStorage.deleteKey(Default.storagePrefix+'school');
+			$.jStorage.deleteKey(Default.storagePrefix+'schoolftcolumns');
+			$.jStorage.deleteKey(Default.storagePrefix+'schoolftrows');
+			//
 			$('#school').val($.jStorage.get(Default.storagePrefix+'school',''));
 			$('#summary-school').text($.jStorage.get(Default.storagePrefix+'school',''));
 			$('#time').val($.jStorage.get(Default.storagePrefix+'time',''));
@@ -825,6 +842,12 @@
 				$('#date-tomorrow').addClass('active');
 				$('#summary-date').text('Tomorrow');
 				$('#date-tomorrow-icon').html(Default.check);
+			}
+			if(storageDate === 'twodays')
+			{
+				$('#date-twodays').addClass('active');
+				$('#summary-date').text(TwoDays.day());
+				$('#date-twodays-icon').html(Default.check);
 			}
 			
 			// Leave right now?
@@ -1098,13 +1121,19 @@
 			{
 				$('#summary-date').text('Today');
 				$('#date-today-icon').html(Default.check);
-				$('#date-tomorrow-icon').text('');
+				$('#date-tomorrow-icon,#date-twodays-icon').text('');
 			}
 			else if($(this).val() === 'tomorrow')
 			{
 				$('#summary-date').text('Tomorrow');
 				$('#date-tomorrow-icon').html(Default.check);
-				$('#date-today-icon').text('');
+				$('#date-today-icon,#date-twodays-icon').text('');
+			}
+			else if($(this).val() === 'twodays')
+			{
+			$('#summary-date').text(TwoDays.day());
+			$('#date-twodays-icon').html(Default.check);
+			$('#date-today-icon,#date-tomorrow-icon').text('');
 			}
 			dateTimeNext();
 		});

@@ -24,16 +24,17 @@ var Default = {
 	fturl:'https://www.googleapis.com/fusiontables/v1/query',
 	// Google maps API key
 	googlemapsapikey:'AIzaSyDH5WuL3gKYVBWVqLr6g3PQffdZE-XhBUw',
+	//googlemapsapikey:'gme-smartchicagocollaborative',
 	// infobox.js options
 	infoboxoptions:{
 		disableAutoPan: false,
 		maxWidth: 0,
-		pixelOffset: new google.maps.Size(-140, 0),
+		pixelOffset: new google.maps.Size(-101, 0),
 		zIndex: null,
 		boxStyle: {
 			background: "url('img/tipbox.gif') no-repeat",
 			opacity: 0.92,
-			width: "160px"
+			width: "200px"
 		},
 		closeBoxMargin: "11px 4px 4px 4px",
 		closeBoxURL: "img/close.gif",
@@ -50,6 +51,8 @@ var Default = {
 	schooltoday:'No Schedule Available',
 	// Default message for tomorrow
 	schooltomorrow:'No Schedule Available',
+	// Default message for two days
+	schooltwodays: 'No Schedule Available',
 	// Google Fusion Tables SQL-like query string for school schedule data
 	schoolschedulequery:'SELECT date, dayofweek, unifiedcalendar FROM 1u765vIMSPecSEinBe1H6JPYSFE5ljbAW1Mq3okc',
 	// Google Fusion Tables SQL-like query string for school location data
