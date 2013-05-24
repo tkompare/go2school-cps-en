@@ -74,7 +74,7 @@
 						}
 						else
 						{
-							$('#time,#summary-time').val('12:00 PM');
+							$('#time,.summary-time').val('12:00 PM');
 						}
 						// Set button time span text
 						$('#time-start-time').text(' - '+startTime);
@@ -84,7 +84,7 @@
 						// time of the newly selected school.
 						if($('#time-start').hasClass('active'))
 						{
-							$('#time,#summary-time').val(startTime);
+							$('#time,.summary-time').val(startTime);
 							if(Application.localStorage)
 							{
 								$.jStorage.set(Default.storagePrefix+'time',startTime);
@@ -92,7 +92,7 @@
 						}
 						else if($('#time-end').hasClass('active'))
 						{
-							$('#time,#summary-time').val(endTime);
+							$('#time,.summary-time').val(endTime);
 							if(Application.localStorage)
 							{
 								$.jStorage.set(Default.storagePrefix+'time',endTime);
@@ -127,11 +127,11 @@
 						var phone = String(Application.Schools[i].data.phone).replace('/[^0-9]/','');
 						if(Application.isPhone)
 						{
-							$('#sick-tel,#sick-tel-summary').html('<a class="btn btn-small btn-warning" style="margin-bottom:2px" href="tel:+1'+phone+'">Call: '+phone.slice(-10,-7)+'-'+phone.slice(-7,-4)+'-'+phone.slice(-4)+'</a>');
+							$('#sick-tel,#sick-tel-summary').html('<a class="btn btn-small btn-warning" style="margin-bottom:2px" href="tel:+1'+phone+'">School: '+phone.slice(-10,-7)+'-'+phone.slice(-7,-4)+'-'+phone.slice(-4)+'</a>');
 						}
 						else
 						{
-							$('#sick-tel,#sick-tel-summary').html('<b>Call: '+phone.slice(-10,-7)+'-'+phone.slice(-7,-4)+'-'+phone.slice(-4)+'</b>');
+							$('#sick-tel,#sick-tel-summary').html('<b>School: '+phone.slice(-10,-7)+'-'+phone.slice(-7,-4)+'-'+phone.slice(-4)+'</b>');
 						}
 						
 						$('#sick').show();
@@ -401,8 +401,8 @@
 										var formattedAddress = results[0].formatted_address.split(',');
 										Application.MyLocation.address = formattedAddress[0];
 										$('#mylocation').val(formattedAddress[0]);
-										$('#mylocation').blur();
-										$('#summary-mylocation').text(formattedAddress[0]);
+										//$('#mylocation').blur();
+										$('.summary-mylocation').text(formattedAddress[0]);
 										if(Application.localStorage)
 										{
 											$.jStorage.set(Default.storagePrefix+'mylocation', formattedAddress[0]);
@@ -527,7 +527,7 @@
 				if(Schools[i].data.longname.match(regex))
 				{
 					Application.SchoolSelected = Schools[i];
-					$('#summary-school').text(Schools[i].data.longname);
+					$('.summary-school').text(Schools[i].data.longname);
 					$('#school').val(Schools[i].data.longname);
 					if(Application.SchoolSelected.data.start.length > 0)
 					{
@@ -538,10 +538,10 @@
 					{
 						$('#time-btns').hide();
 						$('#time.nobtns').show();
-						$('#time,#summary-time').val('12:00 PM');
+						$('#time,.summary-time').val('12:00 PM');
 					}
 					var phone = String(Schools[i].data.phone).replace('/[^0-9]/','');
-					$('#sick-tel,#sick-tel-summary').text('Call: '+phone.slice(-10,-7)+'-'+phone.slice(-7,-4)+'-'+phone.slice(-4));
+					$('#sick-tel,#sick-tel-summary').text('School: '+phone.slice(-10,-7)+'-'+phone.slice(-7,-4)+'-'+phone.slice(-4));
 					$('#sick').show();
 					if(Application.localStorage)
 					{
@@ -555,7 +555,7 @@
 		function route()
 		{
 			// Start up the google directions service and renderer
-			if(Application.DirectionsRenderer !== null)
+			if(Application.DirectionsRenderer !== null) 
 			{
 				Application.DirectionsRenderer.setMap(null);
 			}
@@ -618,11 +618,11 @@
 					{
 						if(Application.leaverightnow === true)
 						{
-							$('#grp-directions').html('<div class="span12 center"><h4>Leave by <span id=timetoleave></span></h4><p id=clickroutetext><small>Click any suggested route below to see alternate directions.</small><p></div><div id=directions class="span8 offset2"></div>');
+							$('#grp-directions').html('<div class="span12 center"><h3>Leave by <span id=timetoleave></span></h3><p id=clickroutetext><small>Click any suggested route below to see alternate directions.</small><p></div><div id=directions class="span8 offset2"></div>');
 						}
 						else
 						{
-							$('#grp-directions').html('<div class="span12 center"><h4>Leave '+$('#summary-date').text()+' by <span id=timetoleave></span></h4><p id=clickroutetext><small>Click any suggested route below to see alternate directions.</small><p></div><div id=directions class="span8 offset2"></div>');
+							$('#grp-directions').html('<div class="span12 center"><h3>Leave '+$('#summary-date').text()+' by <span id=timetoleave></span></h3><p id=clickroutetext><small>Click any suggested route below to see alternate directions.</small><p></div><div id=directions class="span8 offset2"></div>');
 						}
 						$('#grp-directions').addClass('padded');
 						$('#grp-directions').show();
@@ -643,6 +643,7 @@
 						for(var i in Application.Schools)
 						{
 							Application.Schools[i].marker.setMap(null);
+							Application.Schools[i].closeInfoBox(Application.Map.Map,Application.Schools[i].marker,Application.Schools[i].infobox);
 						}
 						Application.DirectionsRenderer.setDirections(Response);
 						if(Application.travelmode === 'TRANSIT')
@@ -652,10 +653,22 @@
 						else
 						{
 								var travelhours = 0;
-								var travelminutes = Application.DirectionsRenderer.directions.routes[0].legs[0].duration.text.match(/([0-9]+) min/)[1];
-								if(Application.DirectionsRenderer.directions.routes[0].legs[0].duration.text.match(/([0-9]+) h/))
+								var travelminutes = 0;
+								if(typeof Application.DirectionsRenderer.directions.routes[0].legs[0].duration_in_traffic !== 'undefined')
 								{
-									travelhours = Application.DirectionsRenderer.directions.routes[0].legs[0].duration.text.match(/([0-9]+) h/)[1];
+									travelminutes = Application.DirectionsRenderer.directions.routes[0].legs[0].duration_in_traffic.text.match(/([0-9]+) min/)[1];
+									if(Application.DirectionsRenderer.directions.routes[0].legs[0].duration_in_traffic.text.match(/([0-9]+) h/))
+									{
+										travelhours = Application.DirectionsRenderer.directions.routes[0].legs[0].duration_in_traffic.text.match(/([0-9]+) h/)[1];
+									}
+								}
+								else
+								{
+									travelminutes = Application.DirectionsRenderer.directions.routes[0].legs[0].duration.text.match(/([0-9]+) min/)[1];
+									if(Application.DirectionsRenderer.directions.routes[0].legs[0].duration.text.match(/([0-9]+) h/))
+									{
+										travelhours = Application.DirectionsRenderer.directions.routes[0].legs[0].duration.text.match(/([0-9]+) h/)[1];
+									}
 								}
 								var milleseconds = ((parseInt(travelhours) * 60) + parseInt(travelminutes)) * 60000;
 								// Subtract 10 minutes so no one is late.
@@ -711,10 +724,22 @@
 							else
 							{
 								var travelhours = 0;
-								var travelminutes = Application.DirectionsRenderer.directions.routes[this.routeIndex].legs[0].duration.text.match(/([0-9]+) min/)[1];
-								if(Application.DirectionsRenderer.directions.routes[this.routeIndex].legs[0].duration.text.match(/([0-9]+) h/))
+								var travelminutes = 0;
+								if(typeof Application.DirectionsRenderer.directions.routes[this.routeIndex].legs[0].duration_in_traffic !== 'undefined')
 								{
-									travelhours = Application.DirectionsRenderer.directions.routes[this.routeIndex].legs[0].duration.text.match(/([0-9]+) h/)[1];
+									travelminutes = Application.DirectionsRenderer.directions.routes[this.routeIndex].legs[0].duration_in_traffic.text.match(/([0-9]+) min/)[1];
+									if(Application.DirectionsRenderer.directions.routes[this.routeIndex].legs[0].duration_in_traffic.text.match(/([0-9]+) h/))
+									{
+										travelhours = Application.DirectionsRenderer.directions.routes[this.routeIndex].legs[0].duration_in_traffic.text.match(/([0-9]+) h/)[1];
+									}
+								}
+								else
+								{
+									travelminutes = Application.DirectionsRenderer.directions.routes[this.routeIndex].legs[0].duration.text.match(/([0-9]+) min/)[1];
+									if(Application.DirectionsRenderer.directions.routes[this.routeIndex].legs[0].duration.text.match(/([0-9]+) h/))
+									{
+										travelhours = Application.DirectionsRenderer.directions.routes[this.routeIndex].legs[0].duration.text.match(/([0-9]+) h/)[1];
+									}
 								}
 								var milleseconds = ((parseInt(travelhours) * 60) + parseInt(travelminutes)) * 60000;
 								// Subtract 10 minutes so no one is late.
@@ -749,43 +774,55 @@
 							}
 						});
 						google.maps.event.addListener(Application.DirectionsRenderer, 'directions_changed', function() {
-								var travelhours = 0;
-								var travelminutes = Application.DirectionsRenderer.directions.routes[this.routeIndex].legs[0].duration.text.match(/([0-9]+) min/)[1];
-								if(Application.DirectionsRenderer.directions.routes[this.routeIndex].legs[0].duration.text.match(/([0-9]+) h/))
+							var travelhours = 0;
+							var travelminutes = 0;
+							if(typeof Application.DirectionsRenderer.directions.routes[0].legs[0].duration_in_traffic !== 'undefined')
+							{
+								travelminutes = Application.DirectionsRenderer.directions.routes[0].legs[0].duration_in_traffic.text.match(/([0-9]+) min/)[1];
+								if(Application.DirectionsRenderer.directions.routes[0].legs[0].duration_in_traffic.text.match(/([0-9]+) h/))
 								{
-									travelhours = Application.DirectionsRenderer.directions.routes[this.routeIndex].legs[0].duration.text.match(/([0-9]+) h/)[1];
+									travelhours = Application.DirectionsRenderer.directions.routes[0].legs[0].duration_in_traffic.text.match(/([0-9]+) h/)[1];
 								}
-								var milleseconds = ((parseInt(travelhours) * 60) + parseInt(travelminutes)) * 60000;
-								// Subtract 10 minutes so no one is late.
-								var unixtimeLeaveBy = unixtime - milleseconds  - 600000;
-								var LeaveByDate = new Date();
-								if(Application.leaverightnow === false)
+							}
+							else
+							{
+								travelminutes = Application.DirectionsRenderer.directions.routes[0].legs[0].duration.text.match(/([0-9]+) min/)[1];
+								if(Application.DirectionsRenderer.directions.routes[0].legs[0].duration.text.match(/([0-9]+) h/))
 								{
-									LeaveByDate = new Date(unixtimeLeaveBy);
+									travelhours = Application.DirectionsRenderer.directions.routes[0].legs[0].duration.text.match(/([0-9]+) h/)[1];
 								}
-								var ampm = 'AM';
-								var hour = LeaveByDate.getHours();
-								if (hour > 11)
-								{
-									hour = hour - 12;
-									ampm = 'PM';
-								}
-								else if(hour < 1)
-								{
-									hour = 12;
-								}
-								var minute = LeaveByDate.getMinutes();
-								if(String(minute).length === 1)
-								{
-									minute = '0'+minute;
-								}
-								else if(String(minute).length === 0)
-								{
-									minute = '00';
-								}
-								var leaveByDateString = hour+':'+minute+' '+ampm;
-								$('#timetoleave').html(leaveByDateString);
-								$('#clickroutetext').hide();
+							}
+							var milleseconds = ((parseInt(travelhours) * 60) + parseInt(travelminutes)) * 60000;
+							// Subtract 10 minutes so no one is late.
+							var unixtimeLeaveBy = unixtime - milleseconds  - 600000;
+							var LeaveByDate = new Date();
+							if(Application.leaverightnow === false)
+							{
+								LeaveByDate = new Date(unixtimeLeaveBy);
+							}
+							var ampm = 'AM';
+							var hour = LeaveByDate.getHours();
+							if (hour > 11)
+							{
+								hour = hour - 12;
+								ampm = 'PM';
+							}
+							else if(hour < 1)
+							{
+								hour = 12;
+							}
+							var minute = LeaveByDate.getMinutes();
+							if(String(minute).length === 1)
+							{
+								minute = '0'+minute;
+							}
+							else if(String(minute).length === 0)
+							{
+								minute = '00';
+							}
+							var leaveByDateString = hour+':'+minute+' '+ampm;
+							$('#timetoleave').html(leaveByDateString);
+							$('#clickroutetext').hide();
 						});
 					}
 					else
@@ -815,12 +852,12 @@
 			$.jStorage.deleteKey(Default.storagePrefix+'schoolftrows');
 			//
 			$('#school').val($.jStorage.get(Default.storagePrefix+'school',''));
-			$('#summary-school').text($.jStorage.get(Default.storagePrefix+'school',''));
+			$('.summary-school').text($.jStorage.get(Default.storagePrefix+'school',''));
 			$('#time').val($.jStorage.get(Default.storagePrefix+'time',''));
 			Application.leaverightnow  = $.jStorage.get(Default.storagePrefix+'leaverightnow',false);
-			$('#summary-time').text($.jStorage.get(Default.storagePrefix+'time',''));
+			$('.summary-time').text($.jStorage.get(Default.storagePrefix+'time',''));
 			$('#mylocation').val($.jStorage.get(Default.storagePrefix+'mylocation',''));
-			$('#summary-mylocation').text($.jStorage.get(Default.storagePrefix+'mylocation',''));
+			$('.summary-mylocation').text($.jStorage.get(Default.storagePrefix+'mylocation',''));
 			storageDate = $.jStorage.get(Default.storagePrefix+'date','');
 			storageTravel = $.jStorage.get(Default.storagePrefix+'travel','');
 			ScheduleFT.columns = $.jStorage.get(Default.storagePrefix+'scheduleftcolumns',null);
@@ -834,32 +871,32 @@
 			if(storageDate === 'today')
 			{
 				$('#date-today').addClass('active');
-				$('#summary-date').text('Today');
+				$('.summary-date').text('Today');
 				$('#date-today-icon').html(Default.check);
 			}
 			if(storageDate === 'tomorrow')
 			{
 				$('#date-tomorrow').addClass('active');
-				$('#summary-date').text('Tomorrow');
+				$('.summary-date').text('Tomorrow');
 				$('#date-tomorrow-icon').html(Default.check);
 			}
 			if(storageDate === 'twodays')
 			{
 				$('#date-twodays').addClass('active');
-				$('#summary-date').text(TwoDays.day());
+				$('.summary-date').text(TwoDays.day());
 				$('#date-twodays-icon').html(Default.check);
 			}
 			
 			// Leave right now?
 			if(Application.leaverightnow === true)
 			{
-				$('#summary-datetime').hide();
-				$('#summary-leaverightnow').show();
+				$('.summary-datetime').hide();
+				$('.summary-leaverightnow').show();
 			}
 			else
 			{
-				$('#summary-leaverightnow').hide();
-				$('#summary-datetime').show();
+				$('.summary-leaverightnow').hide();
+				$('.summary-datetime').show();
 			}
 			
 			// Apply the travel type
@@ -867,21 +904,21 @@
 			if(storageTravel === 'WALKING')
 			{
 				$('#travel-walking').addClass('active');
-				$('#summary-travel').text('Walking');
+				$('.summary-travel').text('walking');
 				$('#travel-walking-icon').html(Default.check);
 
 			}
 			else if(storageTravel === 'TRANSIT')
 			{
 				$('#travel-transit').addClass('active');
-				$('#summary-travel').text('CTA/Metra');
+				$('.summary-travel').text('CTA/Metra');
 				$('#travel-transit-icon').html(Default.check);
 
 			}
 			else if(storageTravel === 'DRIVING')
 			{
 				$('#travel-driving').addClass('active');
-				$('#summary-travel').text('Driving');
+				$('.summary-travel').text('driving');
 				$('#travel-driving-icon').html(Default.check);
 			}
 		}
@@ -891,6 +928,10 @@
 		{
 			$('#grp-intro').hide();
 			$('#grp-summary').show();
+		}
+		else
+		{
+			$('#div-summary-go').hide();
 		}
 		// Disable next buttons when form fields are empty
 		function disable(domid){
@@ -1032,7 +1073,7 @@
 			$('#time-next').addClass('disabled').attr('disabled','disabled');
 			$('#time-start-icon,#time-end-icon').html('');
 			$('#time-start,#time-end').removeClass('active');
-			$('#summary-school').text($('#school').val());
+			$('.summary-school').text($('#school').val());
 			if(Application.localStorage)
 			{
 				$.jStorage.set(Default.storagePrefix+'school',$('#school').val());
@@ -1054,7 +1095,7 @@
 						$('#time-nobtns').show();
 					}
 					var phone = String(Application.Schools[i].data.phone).replace('/[^0-9]/','');
-					$('#sick-tel,#sick-tel-summary').text('Call: '+phone.slice(-10,-7)+'-'+phone.slice(-7,-4)+'-'+phone.slice(-4));
+					$('#sick-tel,#sick-tel-summary').text('School: '+phone.slice(-10,-7)+'-'+phone.slice(-7,-4)+'-'+phone.slice(-4));
 					$('#sick').show();
 					break;
 				}
@@ -1096,8 +1137,8 @@
 			{
 				$.jStorage.set(Default.storagePrefix+'leaverightnow',true);
 			}
-			$('#summary-datetime').hide();
-			$('#summary-leaverightnow').show();
+			$('.summary-datetime').hide();
+			$('.summary-leaverightnow').show();
 			$('#grp-time').hide();
 			$('#grp-travel').show();
 			window.scrollTo(0, 1);
@@ -1105,7 +1146,7 @@
 		
 		// date-time screen function
 		function dateTimeNext() {
-			if($('#summary-date').text().length > 0 && $('#time').val() !== '')
+			if($('.summary-date').text().length > 0 && $('#time').val() !== '')
 			{
 				$('#time-next').removeClass('disabled').removeAttr('disabled');
 			}
@@ -1119,21 +1160,21 @@
 			}
 			if($(this).val() === 'today')
 			{
-				$('#summary-date').text('Today');
+				$('.summary-date').text('Today');
 				$('#date-today-icon').html(Default.check);
 				$('#date-tomorrow-icon,#date-twodays-icon').text('');
 			}
 			else if($(this).val() === 'tomorrow')
 			{
-				$('#summary-date').text('Tomorrow');
+				$('.summary-date').text('Tomorrow');
 				$('#date-tomorrow-icon').html(Default.check);
 				$('#date-today-icon,#date-twodays-icon').text('');
 			}
 			else if($(this).val() === 'twodays')
 			{
-			$('#summary-date').text(TwoDays.day());
-			$('#date-twodays-icon').html(Default.check);
-			$('#date-today-icon,#date-tomorrow-icon').text('');
+				$('.summary-date').text(TwoDays.day());
+				$('#date-twodays-icon').html(Default.check);
+				$('#date-today-icon,#date-tomorrow-icon').text('');
 			}
 			dateTimeNext();
 		});
@@ -1150,7 +1191,7 @@
 				$('#time-start-icon').html(Default.check);
 				var timestring = formattime(Application.SchoolSelected.data.start);
 				$('#time').timepicker('setTime', timestring);
-				$('#summary-time').text(timestring);
+				$('.summary-time').text(timestring);
 				if(Application.localStorage)
 				{
 					$.jStorage.set(Default.storagePrefix+'time', timestring);
@@ -1171,7 +1212,7 @@
 				$('#time-end-icon').html(Default.check);
 				var timestring = formattime(Application.SchoolSelected.data.end);
 				$('#time').timepicker('setTime', timestring);
-				$('#summary-time').text(timestring);
+				$('.summary-time').text(timestring);
 				if(Application.localStorage)
 				{
 					$.jStorage.set(Default.storagePrefix+'time', timestring);
@@ -1186,7 +1227,7 @@
 			{
 				$.jStorage.set(Default.storagePrefix+'time', $('#time').val());
 			}
-			$('#summary-time').text($('#time').val());
+			$('.summary-time').text($('#time').val());
 			$('#time-start-icon,#time-end-icon').text('');
 			$('#time-start,#time-end').removeClass('active');
 			dateTimeNext();
@@ -1201,19 +1242,19 @@
 			}
 			if($(this).val() === 'WALKING')
 			{
-				$('#summary-travel').text('Walking');
+				$('.summary-travel').text('walking');
 				$('#travel-walking-icon').html(Default.check);
 				$('#travel-transit-icon,#travel-driving-icon').text('');
 			}
 			else if($(this).val() === 'TRANSIT')
 			{
-				$('#summary-travel').text('CTA/Metra');
+				$('.summary-travel').text('CTA/Metra');
 				$('#travel-transit-icon').html(Default.check);
 				$('#travel-walking-icon,#travel-driving-icon').text('');
 			}
 			else if($(this).val() === 'DRIVING')
 			{
-				$('#summary-travel').text('Driving');
+				$('.summary-travel').text('driving');
 				$('#travel-driving-icon').html(Default.check);
 				$('#travel-walking-icon,#travel-transit-icon').text('');
 			}
@@ -1233,7 +1274,7 @@
 			{
 				$.jStorage.set(Default.storagePrefix+'mylocation', $('#mylocation').val());
 			}
-			$('#summary-mylocation').text($('#mylocation').val());
+			$('.summary-mylocation').text($('#mylocation').val());
 			if($('#mylocation').val() !== Application.MyLocation.address)
 			{
 				var geocoder = new google.maps.Geocoder();
@@ -1277,6 +1318,11 @@
 				$('#grp-'+hide).hide();
 				$('#grp-'+show).show();
 				window.scrollTo(0, 1);
+				if(show === 'summary,#isschool')
+				{
+					_gaq.push(['_trackEvent', 'Route', 'Click', Application.SchoolSelected.data.longname]);
+					route();
+				}
 			};
 		}
 		
@@ -1293,8 +1339,8 @@
 			{
 				$.jStorage.set(Default.storagePrefix+'leaverightnow',false);
 			}
-			$('#summary-datetime').show();
-			$('#summary-leaverightnow').hide();
+			$('.summary-datetime').show();
+			$('.summary-leaverightnow').hide();
 			$('#grp-time').hide();
 			$('#grp-travel').show();
 			window.scrollTo(0, 1);
@@ -1315,10 +1361,27 @@
 		// mylocation "back" button click
 		$('#mylocation-back').click(hideshow('mylocation','travel'));
 		
+		// HELP BUTTONS -----------------------------------------------------------
+		$('#start-help-btn').click(function(){
+			document.getElementById('help-start').scrollIntoView();
+		});
+		
+		$('#summary-help-btn').click(function(){
+			document.getElementById('help-sum').scrollIntoView();
+		});
+		
+		$('#help-start,#help-sum,#help-end').click(function(){
+			document.getElementById('before-map-fluid').scrollIntoView();
+		});
+		
 		// SUMMARY BUTTONS --------------------------------------------------------
 		function summarybtn(grp)
 		{
 			return function(){
+				if(grp === 'school')
+				{
+					$('#div-summary-go').hide();
+				}
 				$('#grp-summary,#isschool').hide();
 				$('#grp-'+grp).show();
 				$('#grp-directions').html('');

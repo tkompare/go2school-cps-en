@@ -116,6 +116,15 @@ var MapLocation = (function(){
 				}
 			};
 		};
+		
+		this.closeInfoBox = function(Map,Marker,InfoBox)
+		{
+			if(InfoBox.visible)
+			{
+				InfoBox.close(Map,Marker);
+			}
+		};
+		
 	};
 	return constructor;
 })();
@@ -155,6 +164,15 @@ var School = (function(){
 				}
 			};
 		};
+		
+		this.closeInfoBox = function(Map,Marker,InfoBox)
+		{
+			if(InfoBox.visible)
+			{
+				InfoBox.close(Map,Marker);
+			}
+		};
+		
 	};
 	return constructor;
 })();
