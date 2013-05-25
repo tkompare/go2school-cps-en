@@ -35,25 +35,28 @@
 	@media only screen and (min-width:768px) {
 		#directions,#summary-go{position:relative;left:-2em}
 		#timepicker,#date-btns,#time-btns{margin-bottom:2em;margin-top:2em}
+		#help,#intro-text{padding-left:30px;padding-right:30px;font-size:112%;line-height:150%}
 	}
 	@media only screen and (max-width:767px) {
 		#interbutton{margin-bottom:2em;margin-top:2em}
 		#leaverightnow{margin-top:1em}
+		#help{padding-left:15px;padding-right:15px;}
 	}
 	.adp-directions{width:100%}
 	.adp-text{padding-left:2em}
+	.lead{margin-bottom:0.375em}
 </style>
 <title>GoToSchool</title>
 </head>
 <body>
 	<div id=before-map-fluid class=row-fluid>
 		<div id=before-map class="span12">
-			<h2 class=center>Go To School!</h2>
+			<h2 class="center">Go To School!</h2>
 			<noscript><p class=center><strong class="label label-important">We're sorry. You'll need to turn on Javascript to use this web site.</strong></p></noscript>
 			<div id=isschool>
-				<div class=center><b><span id=schedule></span></b></div>
-				<div class=center><b><span id=schedule-tomorrow></span></b></div>
-				<div class=center><b><span id=schedule-twodays></span></b></div>
+				<div class=center>
+					<b>&nbsp;&nbsp;<span id=schedule></span>&nbsp;&nbsp;</b><b>&nbsp;&nbsp;<br class=visible-phone />&nbsp;&nbsp;<span id=schedule-tomorrow></span>&nbsp;&nbsp;<br class=visible-phone />&nbsp;&nbsp;</b><b>&nbsp;&nbsp;<span id=schedule-twodays></span>&nbsp;&nbsp;</b>
+			</div>
 			</div>
 			<div id=grp-intro class="control-group center padded margin2">
 				<p class="center padded margin2"><span id=intro-text>Answer four questions and get to your Chicago public school on time.</span></p>
@@ -133,17 +136,6 @@
 					<p class=text-left>I'm going to <span class=summary-school></span>, <span class=summary-datetime><span class=summary-date></span> at <span class=summary-time></span></span><span class=summary-leaverightnow>leaving right now</span>. I'm getting there by <span class=summary-travel></span> from <span class=summary-mylocation></span>. <br>
 					<div class=margint1><button id=summary-school-btn class="btn btn-small btn-primary pull-right" type="button">Start Over</button><span id=sick-tel-summary></span><button id="summary-help-btn" class="btn btn-small pull-left">Help</button></div><br></p>
 				</div>
-<!--
-				<div class="span8 offset2 margin2">
-				<table class="table">
-					<tr><td><b>Name of School:</b></td><td><span class=summary-school></span><button id=summary-school-btn class="btn btn-mini pull-right" type="button">Change</button></td></tr>
-					<tr><td><b>Time to Arrive:</b></td><td><span id=summary-datetime><span class=summary-time></span> - <span id=summary-date class=summary-date></span></span><span id=summary-leaverightnow>Leave Right Now</span><button id=summary-time-btn class="btn btn-mini pull-right" type="button">Change</button></td></tr>
-					<tr><td><b>Travel Mode:</b></td><td><span class=summary-travel></span><button id=summary-travel-btn class="btn btn-mini pull-right" type="button">Change</button></td></tr>
-					<tr><td><b>Leaving From:</b></td><td><span class=summary-mylocation></span><button id=summary-mylocation-btn class="btn btn-mini pull-right" type="button">Change</button></td></tr>
-					<tr><td><b>Sick?</b></td><td><span id=sick-tel-summary></span></td><td></td>
-				</table>
-				</div>
--->
 				<div id=div-summary-go class="span4 offset4 marginb2">
 					<button id=summary-go class="btn btn-large btn-warning">Go!</button>
 				</div>
@@ -186,23 +178,23 @@
 				<hr>
 				<div id=help>
 					<a id=help-start>Back</a>
-					<h4 class=margint1>Get Started</h4>
+					<p class="margint1 lead marginbn1">Get Started</h4>
 					<p>To get started, press the <b>Start</b> button and answer four questions to find your way to school on time:</p>
 					<p><b>1. What is the name of your school?</b> Start typing in any part of your school's name and you'll see matching names names appear as you type. Continue typing or select a name in the drop-down. Once a school name is entered, the school's office phone number will appear. Call this number to report an absence. On an iPhone or Android smartphone, click on the number to call. Click Next to move to the next question.</p>
 					<p><b>2. When do you want to arrive?</b> Choose either Today, Tomorrow, or the next day, then choose Start of School or End of School. You may also enter your own time. Click Next< to move on.</p>
 					<p><b>3. How are you getting there?</b> Select Walking, CTA/Metra, or Driving. Click Next.</p>
 					<p><b>4. Where are you?</b> Enter the address of the location where you are starting from. If you are in Chicago, you may just enter the street address (example: 1 W Madison). If you are starting outside of Chicago, you must also enter the city and state. If you are on a GPS capable device, you may use the <b>Find Me</b> link to automatically fill in this information. Click the <b>Next</b> button to move on.</p>
 					<a id=help-sum>Back</a>
-					<h4 class=margint1>Summary</h4>
+					<p class="margint1 lead">Summary</p>
 					<p>Once you answer all four questions, you will see a summary of your choices. Use the Start Over button to go back and change your choices. On iPhone and Android devices, click on the Call button to call the school office. You might need to report an absence.</p>
 					<p>Below the summary of your choices, you will see directions to school and a recommended time to leave. The route recommendation and deprture time estimate are automatically generated. While they are good enough for average conditions, <b>take care to make sure the travel recommendations are right for you</b>. Factors such as neighborhood conditions, traffic, or walking pace may differ daily and by location. To help, street traffic congestion for Chicago are indicated on the map if you choose Driving or CTA/Metra for your travel mode. Green is light traffic, Yellow is moderate traffic, and Red is heavy traffic conditions.</p>
-					<h4 class=margint1>Coming Back for a Visit</h4>
+					<p class="margint1 lead">Coming Back for a Visit</p>
 					<p>Go To School saves your information in your device. When you come back with the same computer, tablet, or smartphone, you will not have to reenter anything. Go To School will automatically send you right to the summary page. Just click <b>Go</b> to see you directions. <a href="http://en.wikipedia.org/wiki/Web_storage" target="_blank">Read more about local web storage on Wikipedia</a>.</p>
-					<h4 class=margint1>About</h4>
+					<p class="margint1 lead">About</p>
 					<p>This app was the brainchild of <a href="http://about.me/tomkompare" target="_blank">Tom Kompare</a> wondering what time he had to get to his CTA Red Line stop in order to pick up his daughter from kindergarten on time. So, Tom really built this web application for himself, but he thought he ought to share.</p>
-					<p>Tom believes in sharing so strongly, that the code behind this site is freely available to anyone who may want to implement this in their school district. <a href="http://github.com/tkompare/go2school/" target="_blank">You may find the code here</a>. If you or your school district needs help getting Go2School up and running, <a href="http://about.me/tomkompare" target="_blank">feel free to contact Tom</a>.</p>
-					<h4>Disclaimer</h4>
-					<p>Go2School brings together available data and services from third parties, and we take it on faith alone that the information and services used in Go2School are the best available. However, we do not guarantee accuracy of information. We make no representations or warranties regarding the accuracy or completeness of any content or the products. We disclaim all warranties in connection with the content and the products, and will not be liable for any damage or loss resulting from your use of the content or the products.</p>
+					<p>Tom believes in sharing so strongly, that the code behind this site is freely available, under <a href="https://github.com/tkompare/go2school-cps-en/LICENSE.TXT" target="_blank">The MIT license</a>, to anyone who may want to implement this in their school district. <a href="http://github.com/tkompare/go2school-cps-en/" target="_blank">You may find the code here</a>. If you or your school district needs help getting Go2School up and running, <a href="http://about.me/tomkompare" target="_blank">feel free to contact Tom</a>.</p>
+					<p class="margint1 lead">Disclaimer</p>
+					<p>We make no representations or warranties regarding the accuracy or completeness of any content or the product. We disclaim all warranties in connection with the content and the product, and will not be liable for any damage or loss resulting from your use of the content or the product.</p>
 					<p><i>Google&reg; Walking Directions Disclaimer</i>: Walking directions are in beta. Use caution – Routes may be missing sidewalks or pedestrian paths.</p>
 					<a id=help-end>Back</a><br><br>
 				</div>
