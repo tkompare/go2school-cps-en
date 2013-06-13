@@ -6,6 +6,8 @@
 <meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1" />
 <link rel="icon" href="img/favicon.ico" type=”image/x-icon”>
 <link rel="apple-touch-icon-precomposed" href="img/icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <!--[if lt IE 9]>
 <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
@@ -59,29 +61,31 @@
 			</div>
 			</div>
 			<div id=grp-intro class="control-group center padded margin2">
-				<p class="center padded margin2"><span id=intro-text>Answer four questions and get to your Chicago public school on time.</span></p>
+				<p class="center padded margin2"><span id=intro-text>Four steps get to your CPS school on time.</span></p>
 				<button id=intro-start class="btn btn-large btn-primary">Start</button>
-				<button id=start-help-btn class="btn btn-large">Help</button>
+				<button id=start-help-btn class="btn btn-large">Learn More</button>
 			</div>
 			<div id=grp-school class="control-group center padded margin2">
 				<label class=control-label for=school><h4>What is the name of your school?</h4></label>
 				<div class=controls>
 					<input id=school class=span10 type=text placeholder="Name of school" />
 				</div>
-				<span id=sick class=center>Sick? <span id=sick-tel></span></span>
+				<span id=sick class=center><span id=sick-tel></span></span>
 				<div class="center margin2">
-					<button id=school-next class="btn btn-large btn-primary">Next</button><br>
+					<h4>Go to, or come from school?</h4>
+					<button id=school-to class="btn btn-large btn-primary">Go To</button>
+					<button id=school-from class="btn btn-large">Come From</button><br><br>
 					<small>1/4</small>
 				</div>
 			</div>
 			<div id=grp-time class="center padded margin2">
-				<h4>When do you want to arrive?&nbsp;&nbsp;<button id=leaverightnow class="btn btn-inverse btn-small" type=button>Leave Now</button></h4>
+				<h4>When do you want to <span id=traveldir>arrive</span>?&nbsp;&nbsp;<small>(Choose day and time)</small></h4>
 				<div class="span12 margin2" style="margin-left:0px">
 					<div id=date-btns class="span6 btn-group btn-group-vertical" data-toggle=buttons-radio>
+						<button id=leaverightnow class="btn btn-large btn-block btn-primary" type=button>As Soon As Possible</button>
 						<button id=date-today name=date value=today class="btn btn-large btn-block btn-primary date"><span id=date-today-icon></span>Today</button>
 						<button id=date-tomorrow name=date value=tomorrow class="btn btn-large btn-block btn-primary date"><span id=date-tomorrow-icon></span>Tomorrow</button>
 						<button id=date-twodays name=date value=twodays class="btn btn-large btn-block btn-primary date"><span id=date-twodays-icon></span><span id=twodaysname>Two Days From Today</span></button>
-						
 					</div>
 					<div id="interbutton"></div>
 					<div id=time-btns class="span6 btn-group btn-group-vertical" data-toggle=buttons-radio>
@@ -133,7 +137,9 @@
 			</div>
 			<div id="grp-summary" class="control-group center padded margin2">
 				<div id=summary-text class="span8 offset2 margin2">
-					<p class=text-left>I'm going to <span class=summary-school></span>, <span class=summary-datetime><span class=summary-date></span> at <span class=summary-time></span></span><span class=summary-leaverightnow>leaving right now</span>. I'm getting there by <span class=summary-travel></span> from <span class=summary-mylocation></span>. <br>
+					<p class=text-left>
+					<span id=summary-to>I'm going to <span class=summary-school></span>, <span class=summary-datetime><span class=summary-date></span> at <span class=summary-time></span></span><span class=summary-leaverightnow>leaving right now</span>. I'm getting there by <span class=summary-travel></span> from <span class=summary-mylocation></span>. <br></span>
+					<span id=summary-from>I'm going to <span class=summary-mylocation></span>, <span class=summary-datetime><span class=summary-date></span> at <span class=summary-time></span></span><span class=summary-leaverightnow>leaving right now</span>. I'm getting there by <span class=summary-travel></span> from <span class=summary-school></span>. <br></span>
 					<div class=margint1><button id=summary-school-btn class="btn btn-small btn-primary pull-right" type="button">Start Over</button><span id=sick-tel-summary></span><button id="summary-help-btn" class="btn btn-small pull-left">Help</button></div><br></p>
 				</div>
 				<div id=div-summary-go class="span4 offset4 marginb2">
@@ -192,7 +198,7 @@
 					<p>Go To School saves your information in your device. When you come back with the same computer, tablet, or smartphone, you will not have to reenter anything. Go To School will automatically send you right to the summary page. Just click <b>Go</b> to see you directions. <a href="http://en.wikipedia.org/wiki/Web_storage" target="_blank">Read more about local web storage on Wikipedia</a>.</p>
 					<p class="margint1 lead">About</p>
 					<p>This app was the brainchild of <a href="http://about.me/tomkompare" target="_blank">Tom Kompare</a> wondering what time he had to get to his CTA Red Line stop in order to pick up his daughter from kindergarten on time. So, Tom really built this web application for himself, but he thought he ought to share.</p>
-					<p>Tom believes in sharing so strongly, that the code behind this site is freely available, under <a href="https://github.com/tkompare/go2school-cps-en/LICENSE.TXT" target="_blank">The MIT license</a>, to anyone who may want to implement this in their school district. <a href="http://github.com/tkompare/go2school-cps-en/" target="_blank">You may find the code here</a>. If you or your school district needs help getting Go2School up and running, <a href="http://about.me/tomkompare" target="_blank">feel free to contact Tom</a>.</p>
+					<p>Tom believes in sharing so strongly, that the code behind this site is freely available, under <a href="https://github.com/tkompare/go2school-cps-en/blob/master/LICENSE.TXT" target="_blank">The MIT license</a>, to anyone who may want to implement this in their school district. <a href="http://github.com/tkompare/go2school-cps-en/" target="_blank">You may find the code here</a>. If you or your school district needs help getting Go2School up and running, <a href="http://about.me/tomkompare" target="_blank">feel free to contact Tom</a>.</p>
 					<p class="margint1 lead">Disclaimer</p>
 					<p>We make no representations or warranties regarding the accuracy or completeness of any content or the product. We disclaim all warranties in connection with the content and the product, and will not be liable for any damage or loss resulting from your use of the content or the product.</p>
 					<p><i>Google&reg; Walking Directions Disclaimer</i>: Walking directions are in beta. Use caution – Routes may be missing sidewalks or pedestrian paths.</p>

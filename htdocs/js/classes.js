@@ -68,12 +68,16 @@ var GoToSchool = (function(){
 		this.SafeLocations = [];
 		// Holds the array of schedule (date) information
 		this.Schedules = [];
+		// Coming from or going to school? Direction of travel.
+		this.schoolfromto = null;
 		// List of school names for the typeahead drop-down
 		this.schoolnames = [];
 		// Array of Schools
 		this.Schools = [];
 		// The school currently selected
 		this.SchoolSelected = null;
+		// Did user switch from/to ?
+		this.SwitchRoute = false;
 		// Today's Date mm/dd/yyyy
 		this.today = null;
 		// Tomorrow's Date mm/dd/yyyy

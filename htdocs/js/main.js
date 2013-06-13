@@ -588,18 +588,42 @@
 			var transitOptions = {};
 			if(Application.leaverightnow === false)
 			{
-				transitOptions = {
-					// subtract 10 minutes so the user has a bit of a real-life buffer.
-					arrivalTime : new Date(unixtime - 600000)
+				if(Application.schoolfromto === 'from')
+				{
+					transitOptions = {
+						// subtract 10 minutes so the user has a bit of a real-life buffer.
+						departureTime : new Date(unixtime + 600000)
+					};
+				}
+				else
+				{
+					transitOptions = {
+						// subtract 10 minutes so the user has a bit of a real-life buffer.
+						arrivalTime : new Date(unixtime - 600000)
+					};
+				}
+			}
+			var RouteRequest = {};
+			if(Application.schoolfromto === 'from')
+			{
+				RouteRequest = {
+					destination : $('#mylocation').val()+', ' + Default.city + ', ' + Default.state,
+					origin : Application.SchoolSelected.data.address+', '+Default.city+', '+Default.state+' '+Application.SchoolSelected.data.postalcode,
+					transitOptions : transitOptions,
+					provideRouteAlternatives : true,
+					durationInTraffic : true
 				};
 			}
-			var RouteRequest = {
-				origin : $('#mylocation').val()+', ' + Default.city + ', ' + Default.state,
-				destination : Application.SchoolSelected.data.address+', '+Default.city+', '+Default.state+' '+Application.SchoolSelected.data.postalcode,
-				transitOptions : transitOptions,
-				provideRouteAlternatives : true,
-				durationInTraffic : true
-			};
+			else
+			{
+				RouteRequest = {
+					origin : $('#mylocation').val()+', ' + Default.city + ', ' + Default.state,
+					destination : Application.SchoolSelected.data.address+', '+Default.city+', '+Default.state+' '+Application.SchoolSelected.data.postalcode,
+					transitOptions : transitOptions,
+					provideRouteAlternatives : true,
+					durationInTraffic : true
+				};
+			}
 			if(Application.travelmode === 'TRANSIT')
 			{
 				RouteRequest.travelMode = google.maps.TravelMode.TRANSIT;
@@ -852,6 +876,7 @@
 			$.jStorage.deleteKey(Default.storagePrefix+'schoolftrows');
 			//
 			$('#school').val($.jStorage.get(Default.storagePrefix+'school',''));
+			Application.schoolfromto = $.jStorage.get(Default.storagePrefix+'schoolfromto',null);
 			$('.summary-school').text($.jStorage.get(Default.storagePrefix+'school',''));
 			$('#time').val($.jStorage.get(Default.storagePrefix+'time',''));
 			Application.leaverightnow  = $.jStorage.get(Default.storagePrefix+'leaverightnow',false);
@@ -939,7 +964,8 @@
 		}
 		if($('#school').val() === '')
 		{
-			disable('school-next');
+			disable('school-to');
+			disable('school-from');
 		}
 		if(storageDate === '' || $('#time').val() === '')
 		{
@@ -1121,11 +1147,11 @@
 			}
 			if($('#school').val().length > 0 && Application.SchoolSelected !== null)
 			{
-				$('#school-next').removeClass('disabled').removeAttr('disabled');
+				$('#school-to,#school-from').removeClass('disabled').removeAttr('disabled');
 			}
 			else
 			{
-				$('#school-next').addClass('disabled').attr('disabled','disabled');
+				$('#school-to,#school-from').addClass('disabled').attr('disabled','disabled');
 			}
 			centeronschool();
 		});
@@ -1329,8 +1355,33 @@
 		// intro "start" button click
 		$('#intro-start').click(hideshow('intro,#isschool','school'));
 		
-		// school "next" button click
-		$('#school-next').click(hideshow('school','time'));
+		// school "Go To" button click
+		$('#school-to').click(function(){
+			Application.schoolfromto = 'to';
+			if(Application.localstorage)
+			{
+				$.jStorage.set(Default.storagePrefix+'schoolfromto','to');
+			}
+			$('#traveldir').text('arrive');
+			$('#grp-school,#summary-from').hide();
+			$('#grp-time,#summary-to').show();
+			$('#summary-to').removeClass('hidden');
+			$('#summary-from').addClass('hidden');
+		});
+		
+	// school "Come From" button click
+		$('#school-from').click(function(){
+			Application.schoolfromto = 'from';
+			if(Application.localstorage)
+			{
+				$.jStorage.set(Default.storagePrefix+'schoolfromto','from');
+			}
+			$('#traveldir').text('leave');
+			$('#grp-school').hide();
+			$('#grp-time').show();
+			$('#summary-to').addClass('hidden');
+			$('#summary-from').removeClass('hidden');
+		});
 		
 		// time "next" button click
 		$('#time-next').click(function(){
