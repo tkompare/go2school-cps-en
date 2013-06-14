@@ -228,11 +228,13 @@
 				{
 					SafeMarkerOptions.icon = 'img/police.png';
 					Application.SafeLocations[i].marker = new google.maps.Marker(SafeMarkerOptions);
+					Application.SafeLocations[i].data.name = 'Police '+Application.SafeLocations[i].data.name;
 				}
 				else if (Application.SafeLocations[i].data.type === 'fire station')
 				{
 					SafeMarkerOptions.icon = 'img/fire.png';
 					Application.SafeLocations[i].marker = new google.maps.Marker(SafeMarkerOptions);
+					Application.SafeLocations[i].data.name = 'Fire '+Application.SafeLocations[i].data.name;
 				}
 				else if (Application.SafeLocations[i].data.type === 'hospital')
 				{
@@ -591,8 +593,7 @@
 				if(Application.schoolfromto === 'from')
 				{
 					transitOptions = {
-						// subtract 10 minutes so the user has a bit of a real-life buffer.
-						departureTime : new Date(unixtime + 600000)
+						departureTime : new Date(unixtime)
 					};
 				}
 				else
@@ -891,7 +892,7 @@
 			SchoolFT.rows = $.jStorage.get(Default.storagePrefix+'schoolftrows',null);
 			SafeFT.columns = $.jStorage.get(Default.storagePrefix+'safeftcolumns',null);
 			SafeFT.rows = $.jStorage.get(Default.storagePrefix+'safeftrows',null);
-			
+						
 			// Apply the date; today or tomorrow?
 			if(storageDate === 'today')
 			{
@@ -953,6 +954,16 @@
 		{
 			$('#grp-intro').hide();
 			$('#grp-summary').show();
+			if(Application.schoolfromto == 'from')
+			{
+				$('#summary-from').removeClass('hidden');
+				$('#summary-to').addClass('hidden');
+			}
+			else
+			{
+				$('#summary-to').removeClass('hidden');
+				$('#summary-from').addClass('hidden');
+			}
 		}
 		else
 		{
@@ -1358,7 +1369,7 @@
 		// school "Go To" button click
 		$('#school-to').click(function(){
 			Application.schoolfromto = 'to';
-			if(Application.localstorage)
+			if(Application.localStorage)
 			{
 				$.jStorage.set(Default.storagePrefix+'schoolfromto','to');
 			}
@@ -1372,7 +1383,7 @@
 	// school "Come From" button click
 		$('#school-from').click(function(){
 			Application.schoolfromto = 'from';
-			if(Application.localstorage)
+			if(Application.localStorage)
 			{
 				$.jStorage.set(Default.storagePrefix+'schoolfromto','from');
 			}
