@@ -643,11 +643,11 @@
 					{
 						if(Application.leaverightnow === true)
 						{
-							$('#grp-directions').html('<div class="span12 center"><h3>Leave by <span id=timetoleave></span></h3><p id=clickroutetext><small>Click any suggested route below to see alternate directions.</small><p></div><div id=directions class="span8 offset2"></div>');
+							$('#grp-directions').html('<div class="span12 center"><h3>Leave by <span id=timetoleave></span></h3><p id=clickroutetext><small>Click any suggested route below to see alternate directions.<br>CPS Safe Passage routes are on map as thin red lines</small><p></div><div id=directions class="span8 offset2"></div>');
 						}
 						else
 						{
-							$('#grp-directions').html('<div class="span12 center"><h3>Leave '+$('#summary-date').text()+' by <span id=timetoleave></span></h3><p id=clickroutetext><small>Click any suggested route below to see alternate directions.</small><p></div><div id=directions class="span8 offset2"></div>');
+							$('#grp-directions').html('<div class="span12 center"><h3>Leave '+$('#summary-date').text()+' by <span id=timetoleave></span></h3><p id=clickroutetext><small>Click any suggested route below to see alternate directions.<br>CPS Safe Passage routes are on map as thin red lines</small><p></div><div id=directions class="span8 offset2"></div>');
 						}
 						$('#grp-directions').addClass('padded');
 						$('#grp-directions').show();
@@ -1023,6 +1023,14 @@
 		PanZoomControlDiv.index = 1;
 		Application.Map.Map.controls[google.maps.ControlPosition.TOP_RIGHT].push(PanZoomControlDiv);
 		
+	// SAFE PASSAGE ROUTES
+		var SafePassageKML = new google.maps.KmlLayer({
+			driveFileId: "0B05nccUbvw6YSTB2OEF1VkhQdE0",
+			suppressInfoWindows: true,
+			map: Application.Map.Map,
+			preserveViewport: true
+		});
+		
 		if(ScheduleFT.columns === null || ScheduleFT.rows === null)
 		{
 			$.ajax({
@@ -1033,8 +1041,8 @@
 					ScheduleFT.rows = ftdata.rows;
 					if(Application.localStorage)
 					{
-						$.jStorage.set(Default.storagePrefix+'scheduleftcolumns',ScheduleFT.columns);
-						$.jStorage.set(Default.storagePrefix+'scheduleftrows',ScheduleFT.rows);
+						$.jStorage.set(Default.storagePrefix+'scheduleftcolumns',ScheduleFT.columns,{TTL:86400000});
+						$.jStorage.set(Default.storagePrefix+'scheduleftrows',ScheduleFT.rows,{TTL:86400000});
 					}
 					getSchedule(ScheduleFT.columns,ScheduleFT.rows);
 				}
@@ -1056,8 +1064,8 @@
 					SchoolFT.rows = ftdata.rows;
 					if(Application.localStorage)
 					{
-						$.jStorage.set(Default.storagePrefix+'schoolftcolumns',SchoolFT.columns);
-						$.jStorage.set(Default.storagePrefix+'schoolftrows',SchoolFT.rows);
+						$.jStorage.set(Default.storagePrefix+'schoolftcolumns',SchoolFT.columns,{TTL:86400000});
+						$.jStorage.set(Default.storagePrefix+'schoolftrows',SchoolFT.rows,{TTL:86400000});
 					}
 					getSchools(SchoolFT.columns,SchoolFT.rows);
 				}
@@ -1079,8 +1087,8 @@
 					SafeFT.rows = ftdata.rows;
 					if(Application.localStorage)
 					{
-						$.jStorage.set(Default.storagePrefix+'safeftcolumns',SafeFT.columns);
-						$.jStorage.set(Default.storagePrefix+'safeftrows',SafeFT.rows);
+						$.jStorage.set(Default.storagePrefix+'safeftcolumns',SafeFT.columns,{TTL:86400000});
+						$.jStorage.set(Default.storagePrefix+'safeftrows',SafeFT.rows,{TTL:86400000});
 					}
 					getSafe(SafeFT.columns,SafeFT.rows);
 				}

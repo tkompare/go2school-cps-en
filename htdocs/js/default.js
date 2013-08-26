@@ -11,10 +11,10 @@ var Default = {
 			zIndex:20000000
 		},
 		polylineOptions:{
-			strokeColor: '#000',
-			strokeWeight: '4',
-			strokeOpacity: '.67',
-			zIndex:20000000
+			strokeColor: '#00f',
+			strokeWeight: '6',
+			strokeOpacity: '.4',
+			zIndex:1000000
 		},
 		suppressInfoWindows: true
 	},
@@ -44,9 +44,9 @@ var Default = {
 		enableEventPropagation: false
 	},
 	// Start center latutude of the Google map
-	lat:41.85,
+	lat:41.875,
 	// Start center longitude of the Google map
-	lng:-87.675,
+	lng:-87.6425,
 	// Default message for today
 	schooltoday:'No Schedule Available',
 	// Default message for tomorrow
@@ -54,9 +54,9 @@ var Default = {
 	// Default message for two days
 	schooltwodays: 'No Schedule Available',
 	// Google Fusion Tables SQL-like query string for school schedule data
-	schoolschedulequery:'SELECT date, dayofweek, unifiedcalendar FROM 1u765vIMSPecSEinBe1H6JPYSFE5ljbAW1Mq3okc',
+	schoolschedulequery:'SELECT date, dayofweek, unifiedcalendar FROM 1kBI_tAIW4O2dSQzEkDeXlBOZCoDTjuNypTc2AwI',
 	// Google Fusion Tables SQL-like query string for school location data
-	schoollocationquery:'SELECT lat, lng, longname, address, postalcode, phone, start, end FROM 1qCOcgrhGwjt6bdx_UVPSkyIMMVD-1C7CJFvpIjI',
+	schoollocationquery:'SELECT lat, lng, longname, address, postalcode, phone, start, end FROM 1E17fv9i54wkxALLS1MGcmc7Ot93BUB3L3u-k4EI',
 	// Google Fusion Tables SQL-like query string for safe location data
 	safelocationquery:'SELECT lat, lng, name, address, postalcode, phone, type FROM 1I-edYtBu3Dvx_Ng08Gw_GVrPfwa187KGUegsZUc',
 	// spin.js Spinner Options
@@ -94,5 +94,5 @@ var Default = {
 		modalBackdrop:true
 	},
 	// Initial zoom level for the Google map
-	zoom:14
+	zoom:12
 };
